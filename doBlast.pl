@@ -7,6 +7,7 @@ use POSIX;
 use File::Temp qw/ tempfile /;
 use strict;
 
+#required installations of samtools and blastn + DB
 my $samtools = "/apps/SAMTOOLS/1.3/AVX0/GCC/bin/samtools";
 my $blastn = "/apps/BLAST+/2.2.28/bin/blastn";
 my $blastnDB = "/scratch/devel/jcamps/blast/nt";
@@ -198,6 +199,7 @@ foreach $iBOUT (@BOUT)
          }
       }
    }
+#sort output based on description to make it more readable
 @result = sort { (split(' ',$a))[2] cmp (split(' ',$b))[2] } @result;
 
 my ($fileName, $prefix, $fc, $lane, $index, $sql, $doQuery, $subproject, $spath, $newFileName, $outFile, $linkFile);
@@ -207,36 +209,13 @@ if ( defined $opt{'s'} )
    }
 else
    {
-   $fileName = (split(/\//,$file))[-1];
-   $prefix = (split(/\./,$fileName))[0];
-   $fc = (split(/_/,$fileName))[0];
-   $lane = (split(/_/,$fileName))[1];
-   $index =  (split(/:/,(split(/_/,$prefix))[2]))[0];
-   $sql = "\"SELECT  sub.subproject_name, fc.name, la.lane, mi.multiplex_index_name FROM sequencing_loadedwith lw INNER JOIN sequencing_lane la ON la.id = lw.lane_id INNER JOIN sequencing_library li ON lw.library_id = li.id INNER JOIN sequencing_librarysubproject lis ON lis.library_id = li.id INNER JOIN sequencing_subproject sub ON lis.subproject_id = sub.id INNER JOIN sequencing_flowcell fc ON fc.id = la.flowcell_id LEFT JOIN sequencing_multiplexindex mi ON mi.id = li.multiplex_index_id  WHERE  fc.name = \'$fc\' AND la.lane = $lane";
-   if ( $index ne '0' ) 
+   open(OUT,"> $file".".blast");
+   foreach $i ( @result )
       {
-      $sql .=" AND mi.multiplex_index_name = \'$index\' ";
+      print OUT "$i";
       }
-   $sql .=" LIMIT 1\"";
-   $doQuery = `/usr/bin/mysql -u lims_ro -P 3307 -h login3 cnag_lims -NBe $sql`;
-   chomp($doQuery);
-   $subproject = (split /\t/,$doQuery)[0];
-
-   $spath = "/home/production/raul/blast/$subproject";
-   mkdir $spath if (not -d $spath );
-   $newFileName =  $prefix;
-   $newFileName .= '.f' if ( $fastqgz == 1 or $fastq == 1 );
-   $newFileName .= '.u' if (  $opt{'u'} );
-   $newFileName .= '.m' if (  $opt{'m'} );
-   $newFileName .= '.blast';
-   $outFile = "/home/production/raul/blast/all/$newFileName";
-   $linkFile = $spath."/$newFileName";
-   open(OUT,">$outFile");
-   print OUT @result;
-   close(OUT);
-   symlink($outFile,$linkFile);
-   print "$outFile\n";
-}
+   close OUT;
+   }
 
 #clean up the tempoarary files
 foreach $iBOUT (@BOUT)
