@@ -3,10 +3,11 @@ A series of scripts that I have developed for my day-to-day bioinformatic chores
 
 ### doBlast.pl
 Organism identification for reads in a BAM or fastq file using the blastn database. The script requires an istallation of samtools, blastn and blast database. It is capable of running parallel instances to try to speed up the search.
+Its main usefullness has been to look at unmapped fractions in BAM alignment files to try to detect possible contaminating sequences. I have also used it sucessfully to estimate percentages of ribosobal & mitochondrial sequences present in a library prior to alignment.
 
     doBlast.pl [ -c cores ] [-n num] [ -e e-value ] [-m] [-u] [-k] [-s] file
 
-    Do a blast search from selected reads in a bam file ( unmapped default ) or from all reads in a fastq file.
+    Do a blast search from selected reads in a bam file ( unmapped default ) or from reads in a fastq file.
   
       -c  secifiy number of cores (default 1 )
       -n  specify number of sequences to use ( default 1000)
