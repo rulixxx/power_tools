@@ -11,8 +11,9 @@ if ( defined $opts{'h'} or $nargs == 0  )
    print "\n";
    print "   grepFastq.pl [-avso] [-t tiles ] [-f pattern_file] [ pattern ] fastq\n";
    print "\n";
-   print "      Find the fastq register(s) match the specified pattern.\n";
-   print "      Default is to match sequence ids and output to stdout.\n";
+   print "      Find the fastq register(s) that match the specified pattern.\n";
+   print "      Default is to match sequence ids, stop at the first match\n";
+   print "      and output to stdout.\n";
    print "\n";
    print "         -s match sequence instead of the sequence id\n";
    print "         -f specify a file with patterns\n";
