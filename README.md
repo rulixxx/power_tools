@@ -1,5 +1,22 @@
 # power_tools
-A series of scripts that I have developed for my day-to-day bioinformatic chores.
+A series of scripts that I have developed for my day-to-day work with FASTQ files.
+
+### grepFastq.pl
+Efficient grep utility for fastq files, can search either read IDs or sequences. Very useful for filtering fastq files or quickly finding specific reads.
+
+    grepFastq.pl [-avso] [-t tiles ] [-f pattern_file] [ pattern ] fastq
+
+      Find the fastq register(s) that match the specified pattern.
+      Default is to match sequence ids, stop at the first match
+      and output to stdout.
+
+         -s match sequence instead of the sequence id
+         -f specify a file with patterns
+         -t remove the specified tiles (comma separated list)
+         -a find all posible matches, otherwise find only first match
+         -v invert match
+         -o output to a file instead of stdout
+         
 
 ### doBlast.pl
 Organism identification for reads in a BAM or fastq file using the blastn database. The script requires an istallation of samtools, blastn and blast database. It is capable of running parallel instances to try to speed up the search.
