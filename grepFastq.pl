@@ -4,12 +4,12 @@ use Getopt::Std;
 use strict;
 
 my %opts;
-getopts('shaovf:t:', \%opts);
+getopts('shaovf:t:q:', \%opts);
 my $nargs = @ARGV;
 if ( defined $opts{'h'} or $nargs == 0  )
    {
    print "\n";
-   print "   grepFastq.pl [-avso] [-t tiles ] [-f pattern_file] [ pattern ] fastq\n";
+   print "   grepFastq.pl [-avso] [-f pattern_file] [-q quality] [-t tiles] [ pattern ] fastq\n";
    print "\n";
    print "      Find the fastq register(s) that match the specified pattern.\n";
    print "      Default is to match sequence ids, stop at the first match\n";
@@ -19,13 +19,20 @@ if ( defined $opts{'h'} or $nargs == 0  )
    print "         -f specify a file with patterns\n";
    print "         -t remove the specified tiles (comma separated list)\n";
    print "         -a find all posible matches, otherwise find only first match\n";
+   print "         -q return reads with mean quality greater/equal to this value\n";
    print "         -v invert match\n";
    print "         -o output to a file instead of stdout\n";
    print "\n";
    exit 0;
    }
 
-die "cannot specify -t and -f switches at the same time" if ( defined $opts{'t'} and defined $opts{'f'} );
+
+die "cannot specify -t and -f switches at the same time\n" if ( defined $opts{'t'} and defined $opts{'f'} );
+die "cannot specify -t and -q switches at the same time\n" if ( defined $opts{'t'} and defined $opts{'q'} );
+die "cannot specify -f and -q switches at the same time\n" if ( defined $opts{'f'} and defined $opts{'q'} );
+die "cannot specify -t,-q or -f and a pattern at the same time\n" if ( (defined $opts{'f'} or defined $opts{'t'} or defined $opts{'q'} ) and $nargs > 1 );
+
+print $ARGV;
 my $all = 0;
 $all = 1 if ( defined $opts{'a'});
 my $fseq = 0;
@@ -36,19 +43,23 @@ my $invert = 0;
 $invert = 1 if ( defined $opts{'v'});
 *OUT = \*STDOUT;
 
-my $fastq;
 my $expressionFile;
 my @tiles;
 my $expression;
+my $fastq = $ARGV[0];
+my $qcutoff;
+
 if (defined $opts{'f'} )
    {
    $expressionFile = $opts{'f'} ;
-   $fastq = $ARGV[0];
    }
 elsif (defined $opts{'t'} )
    {
    @tiles = split(/,/,$opts{'t'});
-   $fastq = $ARGV[0];
+   }
+elsif (defined $opts{'q'} )
+   {
+   $qcutoff =  $opts{'q'} + 0.0;
    }
 else
    {
@@ -81,7 +92,6 @@ if ( defined $opts{'o'} )
 
 #get patterns from a file
 my ($head,$seq,$plus,$quality,$match,$comp);
-my (@vals,$tile);
 if  (defined $opts{'f'} )
    {
    open(PATT,"< $expressionFile") or die "File $expressionFile not found\n";
@@ -128,8 +138,10 @@ if  (defined $opts{'f'} )
          }
       }
    }
+#filter by tiles
 elsif (defined $opts{'t'} )
    {
+   my (@vals,$tile);
    while(<FASTQ>)
       {
       $head = $_;
@@ -155,6 +167,42 @@ elsif (defined $opts{'t'} )
       print OUT $quality;
       }
    }
+#filter by average quality
+elsif ( defined $opts{'q'} )
+   {
+   my ($iq, $sumq,$aveq);
+   while(<FASTQ>)
+      {
+      $head = $_;
+      $seq = <FASTQ>;
+      $plus = <FASTQ>;
+      $quality = <FASTQ>;
+      $sumq = 0;
+      chomp($quality);
+      foreach  $iq (split //, $quality )
+         {
+         $sumq += ord($iq) - 33;
+         }
+      $aveq = $sumq/length($quality);
+      if ( $invert )
+         {
+         $match = 1 if ( $aveq < $qcutoff);
+         }
+      else
+         {
+         $match = 1 if ( $aveq >= $qcutoff);
+         }
+      if ($match)
+         {
+         print OUT $head;
+         print OUT $seq;
+         print OUT $plus;
+         print OUT "$quality\n";
+         last if ( not $all);
+         }
+      }
+   }
+#filter by header or sequence
 else
    {
    while(<FASTQ>)
