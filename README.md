@@ -1,5 +1,5 @@
 # power_tools
-A series of scripts that I have developed for my day-to-day bioinformatic chores.
+A series of scripts that I have developed for my day-to-day work with FASTQ files.
 
 ### grepFastq.pl
 Efficient grep utility for fastq files, can search either read IDs or sequences. Very useful for filtering fastq files or quickly finding specific reads.
