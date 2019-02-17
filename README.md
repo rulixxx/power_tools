@@ -4,7 +4,7 @@ A series of scripts that I have developed for my day-to-day work with FASTQ file
 ### grepFastq.pl
 Efficient grep utility for fastq files, can search either read IDs or sequences. Very useful for filtering fastq files or quickly finding specific reads.
 
-    grepFastq.pl [-avso] [-t tiles ] [-f pattern_file] [ pattern ] fastq
+    grepFastq.pl [-avso] [-f pattern_file] [-q quality] [-t tiles] [ pattern ] fastq
 
       Find the fastq register(s) that match the specified pattern.
       Default is to match sequence ids, stop at the first match
@@ -14,6 +14,7 @@ Efficient grep utility for fastq files, can search either read IDs or sequences.
          -f specify a file with patterns
          -t remove the specified tiles (comma separated list)
          -a find all posible matches, otherwise find only first match
+         -q return reads with mean quality greater/equal to this value
          -v invert match
          -o output to a file instead of stdout
          
