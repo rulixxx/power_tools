@@ -1,4 +1,4 @@
-# power_tools
+# FASTQ power tools
 A series of scripts that I have developed for my day-to-day work with FASTQ files.
 
 ### grepFastq.pl
