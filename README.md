@@ -20,8 +20,8 @@ Efficient grep utility for fastq files, can search either read IDs or sequences.
          
 
 ### doBlast.pl
-Organism identification for reads in a BAM or fastq file using the blastn database. The script requires an istallation of samtools, blastn and blast database. It is capable of running parallel instances to try to speed up the search.
-Its main usefullness has been to look at unmapped fractions in BAM alignment files to try to detect possible contaminating sequences. I have also used it sucessfully to estimate percentages of ribosobal & mitochondrial sequences present in a library prior to alignment.
+Organism identification for reads in a BAM or fastq file using the blastn database. The script requires an istallation of samtools, blastn and Blast database. It is capable of running parallel instances to try to speed up the search.
+Its main usefullness has been to look at unmapped fractions in BAM alignment files to try to detect possible contaminating sequences. I have also used it sucessfully to do quick estimates of percentages of ribosomal & mitochondrial sequences present in a library prior to alignment.
 
     doBlast.pl [ -c cores ] [-n num] [ -e e-value ] [-m] [-u] [-k] [-s] file
 
