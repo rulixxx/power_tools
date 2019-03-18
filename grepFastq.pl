@@ -119,14 +119,25 @@ if  (defined $opts{'f'} )
             {
             $comp = $head;
             }
-         if ( $invert )
+         if ( $comp =~ /$expression/)
             {
-            $match = 1 if ( $comp !~ /$expression/);
+            $match = 1;
+            last;
             }
-         else
+         }
+      if ( $invert )
+         {
+         if ( not $match )
             {
-            $match = 1 if ( $comp =~ /$expression/);
+            print OUT $head;
+            print OUT $seq;
+            print OUT $plus;
+            print OUT $quality;
+            last if ( not $all);
             }
+         }
+      else
+         {
          if ($match)
             {
             print OUT $head;
