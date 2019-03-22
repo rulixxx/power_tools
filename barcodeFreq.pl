@@ -8,7 +8,7 @@ my %opt;
 getopts('pa', \%opt);
 
 my $narg = @ARGV;
-die ("\nbarcodeFreq.pl index1.fastq index2.fastq\n 
+die ("\nbarcodeFreq.pl index1.fastq [ index2.fastq ]\n 
       Compute the frequency of each barcode present in an index fastqs.
       By default only process the first 1000000 sequences\n
             -a  process all the fastq
