@@ -4,7 +4,7 @@ A series of scripts that I have developed for my day-to-day work with FASTQ file
 ### barcodeFreq.pl
 This simple script take one or two index fastq files and produces a frequency (and percentage) of the occurrence of each barcode. It is usually the first tool to use to examine experiments that had problems demultiplexing.
 
-        barcodeFreq.pl index1.fastq index2.fastq
+        barcodeFreq.pl index1.fastq [ index2.fastq ]
  
             Compute the frequency of each barcode present in an index fastqs.
             By default only process the first 1000000 sequences
