@@ -1,6 +1,36 @@
 # FASTQ power tools
 A series of scripts that I have developed for my day-to-day work with FASTQ files.
 
+### barcodeFreq.pl
+This simple script take one or two index fastq files and produces a frequency (and percentage) of the occurrence of each barcode. It is usually the first tool to use to examine experiments that had problems demultiplexing.
+
+        barcodeFreq.pl index1.fastq index2.fastq
+ 
+            Compute the frequency of each barcode present in an index fastqs.
+            By default only process the first 1000000 sequences
+
+                    -a  process all the fastq
+                    -p  include percenages in output
+
+Sample output (dual index, frequency , percentage):
+        
+        TGGCTAATCA CTACATGCCT	12059	1.21
+        GGAATTGTAA AGGATGTGCT	12164	1.22
+        GCATAAGCTT TGCGACGGAA	13088	1.31
+        CCACCAGGCA ATTCCATAAG	13130	1.31
+        CGTTATTCTA AACCTTATGG	13156	1.32
+        GTGCAGACAG ACGGATGGTA	13367	1.34
+        TTGGAATTCC GTATTGACGT	13531	1.35
+        AACATCGCGC ACAAGTGGAC	14018	1.40
+        AGATCCATTA TGGTAGAGAT	14518	1.45
+        TGGCGCGAAC AGTATCAGTT	14846	1.48
+        GGAGCGTGTA ACTTACGGAT	15595	1.56
+        GATCAAGGCA ATTAACAAGG	15860	1.59
+        TATTGCGCTC CCTAACACAG	16675	1.67
+        GAAGCGGCAC AGTAGAGCCG	17017	1.70
+        CATTAGTGCG TATGTAGTCA	17760	1.78
+        AAAAAAAAAA AGATCTCGGT	36275	3.63
+
 ### grepFastq.pl
 Efficient grep utility for fastq files, can search either read IDs or sequences. Very useful for filtering fastq files or quickly finding specific reads.
 
@@ -17,6 +47,15 @@ Efficient grep utility for fastq files, can search either read IDs or sequences.
          -q return reads with mean quality greater/equal to this value
          -v invert match
          -o output to a file instead of stdout
+         
+ Sample usage:
+        
+        grepFastq.pl 1101:3671:1314 file.fastq
+        
+        @K00310:254:H5FLMBBXY:8:1101:3671:1314 1:N:0:CTTGGATG+TCGCTATC
+        AAGGCCCAGTTAGATCCTCCCCTCTTAGCTGTCTTAAAGAATGGCAGACTGACAGTTGGTCAGAAGATTATTCTTCATGGAGCAGAACTGGTGGGCTCTCC
+        +
+        AA<AFJJJJJJAAJJJJFJJJJJJJFJFFFJAFFFFJJJJJA-7<F-F--7FFJ7----7<J7FJ<JJFFFAF--AAFJFJFFJJJJJFFFJJJJJJJFJJ
          
 
 ### doBlast.pl
@@ -52,3 +91,5 @@ Sample output ( score, evalue, subject title )
     101	9e-45	Oryza rufipogon voucher AusTRCF 309313 chloroplast, complete genome
     74	1e-29	Oryza sativa Indica Group strain WA-CMS mitochondrion, complete genome
     73	3e-29	Oryza sativa Indica Group strain WA-CMS mitochondrion, complete genome 
+
+
