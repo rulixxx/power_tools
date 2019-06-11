@@ -1,5 +1,6 @@
 #!/usr/bin/perl
-#
+#subsample a BAM or fastq to a fasta file that is then blasted.
+#top matches get saved in a .blast file
 
 use List::Util;
 use Getopt::Std;
@@ -11,6 +12,7 @@ use strict;
 my $samtools = "/apps/SAMTOOLS/1.3/AVX0/GCC/bin/samtools";
 my $blastn = "/apps/BLAST+/2.2.28/bin/blastn";
 my $blastnDB = "/scratch/devel/jcamps/blast/nt";
+#my $blastnDB = "/scratch/production/raul/blast/nt";#newer database but much much slower
 
 my %opt;
 getopts('c:n:e:kfums', \%opt);
